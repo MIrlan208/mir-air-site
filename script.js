@@ -67,7 +67,7 @@ const counterIO = new IntersectionObserver((entries) => {
 }, { threshold: 0.5 });
 $$('[data-target]').forEach(el => counterIO.observe(el));
 
-/* ---------- банк идей и проектов ---------- */
+/* ---------- проекты (портфолио) ---------- */
 const TYPE = { idea: 'Идея', project: 'Проект', demo: 'Демо', site: 'Сайт' };
 const STATUS = { idea: 'На обсуждении', work: 'В работе', demo: 'Демо готово', best: 'Лучший проект' };
 const state = { q: '', type: 'all', group: 'all', status: 'all' };
@@ -156,6 +156,17 @@ $$('[data-tg]').forEach(a => {
 });
 if (!hasTg) { const tgSec = $('#telegram'); if (tgSec) tgSec.hidden = true; }
 
+/* ---------- Telegram-бот для идей ---------- */
+(() => {
+  const bot = String(site.bot || '').replace(/^@/, '').trim();
+  const sec = $('#ideas');
+  if (!sec) return;
+  if (!bot) { sec.hidden = true; $$('a[href="#ideas"]').forEach(a => { (a.closest('li') || a).hidden = true; }); return; }
+  const link = 'https://t.me/' + bot;
+  const a = $('#bot-link'); if (a) a.href = link;
+  const n = $('#bot-name'); if (n) n.textContent = '@' + bot;
+})();
+
 /* ---------- контакты и суммы в блоке «Поддержать команду» ---------- */
 (() => {
   const c = site.curator || {};
@@ -238,7 +249,7 @@ if (groupsBox) {
       <div class="g-stats">
         <span><b>${s.size || s.people}</b> ${plural(s.size || s.people, ['участник', 'участника', 'участников'])}</span>
         <span><b>${s.projects}</b> ${plural(s.projects, ['проект', 'проекта', 'проектов'])}</span>
-        <span><b>${s.ideas}</b> ${plural(s.ideas, ['идея', 'идеи', 'идей'])}</span>
+        <span><b>${s.ach.length}</b> ${plural(s.ach.length, ['достижение', 'достижения', 'достижений'])}</span>
       </div>
       <span class="g-go">Смотреть дела →</span>
     </a>`;
@@ -267,7 +278,7 @@ function renderGroup(g) {
       <div class="container stats-grid">
         <div class="stat"><b>${s.size || s.people}</b><span>${plural(s.size || s.people, ['участник', 'участника', 'участников'])}</span></div>
         <div class="stat"><b>${s.projects}</b><span>${plural(s.projects, ['проект', 'проекта', 'проектов'])}</span></div>
-        <div class="stat"><b>${s.ideas}</b><span>${plural(s.ideas, ['идея', 'идеи', 'идей'])}</span></div>
+        <div class="stat"><b>${s.ach.length}</b><span>${plural(s.ach.length, ['достижение', 'достижения', 'достижений'])}</span></div>
         <div class="stat"><b>${s.demos}</b><span>демо</span></div>
       </div>
     </section>
@@ -275,11 +286,10 @@ function renderGroup(g) {
     <section>
       <div class="container">
         <h2 class="title">Дела <span class="grad">группы</span></h2>
-        <p class="sub">Идеи, проекты, демо и сайты ${esc(g.name)}.</p>
+        <p class="sub">Проекты, демо и сайты ${esc(g.name)}.</p>
         <div class="chip-row"><span class="lbl">Тип</span>
           <div class="chips" id="g-chips">
             <button class="on" data-value="all">Все</button>
-            <button data-value="idea">Идеи</button>
             <button data-value="project">Проекты</button>
             <button data-value="demo">Демо</button>
             <button data-value="site">Сайты</button>
@@ -347,7 +357,7 @@ function renderProject(it) {
   view.innerHTML = `
     <div class="page-head">
       <div class="container">
-        <a class="back-link" href="#bank">← Банк идей</a>
+        <a class="back-link" href="#projects">← Проекты</a>
         <div class="bank-top">
           <span class="pill t-${esc(it.type)}">${esc(TYPE[it.type] || it.type)}</span>
           ${gpills(it.groups)}${it.groups.length > 1 ? '<span class="pill t-mix">Смешанная команда</span>' : ''}
@@ -409,7 +419,7 @@ function renderProject(it) {
       ${sameGroup.length ? `<h2 class="title">Ещё от <span class="grad">${esc(it.groups.map(gname).filter(Boolean).join(' и '))}</span></h2>
         <div class="grid grid-3">${sameGroup.map(x => cardHTML(x, false, false)).join('')}</div>` : ''}
       <div class="btns" style="margin-top:28px">
-        <a class="btn btn-primary" href="#bank">Весь банк идей</a>
+        <a class="btn btn-primary" href="#projects">Все проекты</a>
         ${it.groups.filter(gname).map(id => `<a class="btn btn-ghost" href="#${esc(id)}">Страница ${esc(gname(id))}</a>`).join('')}
       </div>
     </div></section>`;

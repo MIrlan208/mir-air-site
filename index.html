@@ -25,7 +25,8 @@
       <ul>
         <li><a href="#about">О нас</a></li>
         <li><a href="#achievements">Достижения</a></li>
-        <li><a href="#bank">Банк идей</a></li>
+        <li><a href="#projects">Проекты</a></li>
+        <li><a href="#ideas">Банк идей</a></li>
         <li><a href="#groups">Группы</a></li>
         <li><a href="#news">Новости</a></li>
         <li><a href="#support">Поддержать</a></li>
@@ -46,7 +47,8 @@
     <p>Мы только начали учиться, но растём с каждым днём и развиваемся сразу в разных направлениях: мехатроника, робототехника, автоматизация и искусственный интеллект. Здесь наши идеи, проекты и первые победы.</p>
     <div class="btns">
       <a href="#about" class="btn btn-primary">Познакомиться с нами</a>
-      <a href="#bank" class="btn btn-ghost">Смотреть проекты</a>
+      <a href="#projects" class="btn btn-ghost">Смотреть проекты</a>
+      <a href="#ideas" class="btn btn-ghost">Предложить идею</a>
       <a href="#photos" class="btn btn-ghost">Новости и фото</a>
       <a data-tg class="btn btn-ghost">Наш Telegram</a>
     </div>
@@ -82,10 +84,11 @@
   </div>
 </section>
 
-<section id="bank">
+<section id="projects">
+  <span id="bank"></span>
   <div class="container">
-    <h2 class="title reveal">Банк идей и <span class="grad">проектов</span></h2>
-    <p class="sub reveal">Здесь видно, чем мы заняты. Ищи по названию, технологии или автору, фильтруй по группе, типу и статусу.</p>
+    <h2 class="title reveal">Наши <span class="grad">проекты</span></h2>
+    <p class="sub reveal">Портфолио группы: проекты, демо и сайты, которыми мы заняты. Ищи по названию, технологии или автору, фильтруй по группе, типу и статусу.</p>
 
     <div class="toolbar reveal">
       <input id="search" class="input" type="search" placeholder="Поиск: робот, Python, Arduino…" aria-label="Поиск">
@@ -103,7 +106,6 @@
     <div class="chip-row reveal"><span class="lbl">Тип</span>
       <div class="chips" data-group="type">
         <button class="on" data-value="all">Все</button>
-        <button data-value="idea">Идеи</button>
         <button data-value="project">Проекты</button>
         <button data-value="demo">Демо</button>
         <button data-value="site">Сайты</button>
@@ -112,7 +114,6 @@
     <div class="chip-row reveal"><span class="lbl">Статус</span>
       <div class="chips" data-group="status">
         <button class="on" data-value="all">Все</button>
-        <button data-value="idea">На обсуждении</button>
         <button data-value="work">В работе</button>
         <button data-value="demo">Демо готово</button>
         <button data-value="best">Лучший</button>
@@ -131,14 +132,35 @@
   </div>
 </section>
 
+<section id="ideas" style="background:var(--bg2)">
+  <div class="container">
+    <div class="ideas-box card reveal">
+      <div>
+        <h2 class="title">Банк <span class="grad">идей</span></h2>
+        <p class="sub">Есть идея проекта, устройства или сайта? Расскажи о ней нашему Telegram-боту. Идеи собираются в общий банк, команда выбирает лучшие, и они становятся проектами.</p>
+        <ol class="idea-steps">
+          <li>Открой бота <b id="bot-name">@KSTUIDEABOT</b> или отсканируй QR-код.</li>
+          <li>Напиши идею: что хочешь сделать и зачем.</li>
+          <li>Команда обсудит её и поможет собрать людей.</li>
+        </ol>
+        <a id="bot-link" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Открыть бота</a>
+      </div>
+      <figure class="qr">
+        <img id="bot-qr" src="img/bot-qr.png" alt="QR-код Telegram-бота для идей" width="203" height="203">
+        <figcaption>Сканируй камерой телефона</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
 <section id="how">
   <div class="container">
     <h2 class="title reveal">Как рождаются <span class="grad">проекты</span></h2>
     <p class="sub reveal">Четыре шага от мысли до готового результата.</p>
     <div class="grid steps">
-      <div class="card step reveal"><div class="num">01</div><h3>Предложи идею</h3><p>Пиши идею в наш Telegram: что хочешь сделать и зачем.</p></div>
+      <div class="card step reveal"><div class="num">01</div><h3>Предложи идею</h3><p>Напиши её нашему боту в Telegram: что хочешь сделать и зачем.</p></div>
       <div class="card step reveal"><div class="num">02</div><h3>Обсуждаем</h3><p>Команда смотрит идеи, объединяется в группы и уточняет задачи.</p></div>
-      <div class="card step reveal"><div class="num">03</div><h3>Делаем</h3><p>Идея превращается в прототип, демо или сайт. Ссылки добавляем в банк.</p></div>
+      <div class="card step reveal"><div class="num">03</div><h3>Делаем</h3><p>Идея превращается в прототип, демо или сайт. Ссылки добавляем в раздел «Проекты».</p></div>
       <div class="card step reveal"><div class="num">04</div><h3>Выбираем лучшее</h3><p>Команда выбирает лучший проект, и он попадает на главное место.</p></div>
     </div>
   </div>
@@ -191,7 +213,7 @@
         <span class="pill t-demo">Видео</span>
         <h3>Наши проекты на защите</h3>
         <p>Короткий ролик с презентаций: ребята показывают свои работы вживую. Робот, автоматический полив, сборка на Arduino и модульные кубы для базы на Марсе.</p>
-        <a href="#bank" class="btn btn-ghost" style="margin-top:20px">Смотреть все проекты →</a>
+        <a href="#projects" class="btn btn-ghost" style="margin-top:20px">Смотреть все проекты →</a>
       </div>
     </div>
   </div>
@@ -230,7 +252,8 @@
     <div>
       <a href="#achievements">Достижения</a>
       <a href="#groups">Группы</a>
-      <a href="#bank">Банк идей</a>
+      <a href="#projects">Проекты</a>
+      <a href="#ideas">Банк идей</a>
       <a href="#support">Поддержать команду</a>
       <a data-tg>Telegram</a>
     </div>
