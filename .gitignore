@@ -1,0 +1,30 @@
+# зависимости
+node_modules/
+
+# сборка
+dist/
+build/
+
+# секреты и локальные настройки
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.cloudflared/
+cert.pem
+
+# логи
+*.log
+npm-debug.log*
+
+# мусор ОС и редакторов
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# локальные архивы
+*.zip
+*.tar.gz

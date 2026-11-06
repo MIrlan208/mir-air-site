@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>МИР×АИР — студенческая команда робототехники и ИИ</title>
+<meta name="description" content="МИР×АИР: первокурсники с большими амбициями, группы МИР-1, МИР-2, МИР-3. Мехатроника, робототехника, автоматизация и искусственный интеллект. Достижения, проекты и банк идей.">
+<meta name="theme-color" content="#0b3c8f">
+<meta property="og:type" content="website">
+<meta property="og:title" content="МИР×АИР — студенческая команда робототехники и ИИ">
+<meta property="og:description" content="Идеи, проекты и достижения первокурсников: мехатроника, робототехника, автоматизация и ИИ.">
+<meta property="og:image" content="img/news-kabar.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%230b3c8f'/%3E%3Cpath d='M16 16l32 32M48 16L16 48' stroke='%23ffd84d' stroke-width='8' stroke-linecap='square'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <a href="#top" class="logo">МИР<span>×</span>АИР</a>
+    <nav>
+      <ul>
+        <li><a href="#about">О нас</a></li>
+        <li><a href="#achievements">Достижения</a></li>
+        <li><a href="#bank">Банк идей</a></li>
+        <li><a href="#groups">Группы</a></li>
+        <li><a href="#news">Новости</a></li>
+        <li><a href="#support">Поддержать</a></li>
+        <li><a class="nav-cta" data-tg>Telegram</a></li>
+      </ul>
+    </nav>
+    <button class="burger" aria-label="Меню" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<div id="home">
+
+<section class="hero" id="top">
+  <div class="orb a"></div><div class="orb b"></div>
+  <div class="container">
+    <span class="tag">Первый курс · <span id="team-count">90</span> человек</span>
+    <h1>Мы первокурсники с <span class="grad">большими амбициями</span></h1>
+    <p>Мы только начали учиться, но растём с каждым днём и развиваемся сразу в разных направлениях: мехатроника, робототехника, автоматизация и искусственный интеллект. Здесь наши идеи, проекты и первые победы.</p>
+    <div class="btns">
+      <a href="#about" class="btn btn-primary">Познакомиться с нами</a>
+      <a href="#bank" class="btn btn-ghost">Смотреть проекты</a>
+      <a href="#photos" class="btn btn-ghost">Новости и фото</a>
+      <a data-tg class="btn btn-ghost">Наш Telegram</a>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="container">
+    <h2 class="title reveal">Кто <span class="grad">мы</span></h2>
+    <p class="sub reveal">Мы первокурсники: учимся, пробуем и растём с каждым днём. Соединяем железо и интеллект, от механики и датчиков до нейросетей и систем управления. Развиваемся в разных направлениях и делаем проекты вместе.</p>
+    <div class="grid dirs">
+      <div class="card reveal"><h3>Мехатроника</h3><p>Соединяем механику, электронику и программирование в одном устройстве.</p></div>
+      <div class="card reveal"><h3>Робототехника</h3><p>Проектируем и собираем роботов, манипуляторы и мобильные платформы.</p></div>
+      <div class="card reveal"><h3>Автоматизация</h3><p>Автоматизируем процессы и пишем алгоритмы управления.</p></div>
+      <div class="card reveal"><h3>Искусственный интеллект</h3><p>Обучаем модели и делаем системы, которые принимают решения.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="groups" style="background:var(--bg2)">
+  <div class="container">
+    <h2 class="title reveal">Наши <span class="grad">группы</span></h2>
+    <p class="sub reveal" id="groups-sub">Открой любую группу.</p>
+    <div class="grid grid-3" id="groups-grid"></div>
+  </div>
+</section>
+
+<section id="achievements">
+  <div class="container">
+    <h2 class="title reveal">Наши <span class="grad">достижения</span></h2>
+    <p class="sub reveal">Победы, награды и события, которые подтверждают результат.</p>
+    <div class="timeline" id="ach-list"></div>
+  </div>
+</section>
+
+<section id="bank">
+  <div class="container">
+    <h2 class="title reveal">Банк идей и <span class="grad">проектов</span></h2>
+    <p class="sub reveal">Здесь видно, чем мы заняты. Ищи по названию, технологии или автору, фильтруй по группе, типу и статусу.</p>
+
+    <div class="toolbar reveal">
+      <input id="search" class="input" type="search" placeholder="Поиск: робот, Python, Arduino…" aria-label="Поиск">
+      <span id="bank-count" class="count"></span>
+    </div>
+
+    <div class="chip-row reveal"><span class="lbl">Группа</span>
+      <div class="chips" data-group="group">
+        <button class="on" data-value="all">Все</button>
+        <button data-value="mir-1">МИР-1</button>
+        <button data-value="mir-2">МИР-2</button>
+        <button data-value="mir-3">МИР-3</button>
+      </div>
+    </div>
+    <div class="chip-row reveal"><span class="lbl">Тип</span>
+      <div class="chips" data-group="type">
+        <button class="on" data-value="all">Все</button>
+        <button data-value="idea">Идеи</button>
+        <button data-value="project">Проекты</button>
+        <button data-value="demo">Демо</button>
+        <button data-value="site">Сайты</button>
+      </div>
+    </div>
+    <div class="chip-row reveal"><span class="lbl">Статус</span>
+      <div class="chips" data-group="status">
+        <button class="on" data-value="all">Все</button>
+        <button data-value="idea">На обсуждении</button>
+        <button data-value="work">В работе</button>
+        <button data-value="demo">Демо готово</button>
+        <button data-value="best">Лучший</button>
+      </div>
+    </div>
+
+    <div class="grid grid-3" id="bank-grid"></div>
+  </div>
+</section>
+
+<section id="best" style="background:var(--bg2)">
+  <div class="container">
+    <h2 class="title reveal">Лучший <span class="grad">проект</span></h2>
+    <p class="sub reveal">Его выбирает команда среди всех проектов банка.</p>
+    <div id="best-box"></div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="container">
+    <h2 class="title reveal">Как рождаются <span class="grad">проекты</span></h2>
+    <p class="sub reveal">Четыре шага от мысли до готового результата.</p>
+    <div class="grid steps">
+      <div class="card step reveal"><div class="num">01</div><h3>Предложи идею</h3><p>Пиши идею в наш Telegram: что хочешь сделать и зачем.</p></div>
+      <div class="card step reveal"><div class="num">02</div><h3>Обсуждаем</h3><p>Команда смотрит идеи, объединяется в группы и уточняет задачи.</p></div>
+      <div class="card step reveal"><div class="num">03</div><h3>Делаем</h3><p>Идея превращается в прототип, демо или сайт. Ссылки добавляем в банк.</p></div>
+      <div class="card step reveal"><div class="num">04</div><h3>Выбираем лучшее</h3><p>Команда выбирает лучший проект, и он попадает на главное место.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="telegram" style="background:var(--bg2)">
+  <div class="container">
+    <div class="tg-box card reveal">
+      <div>
+        <h2 class="title">Наш <span class="grad">Telegram</span></h2>
+        <p class="sub">Этот сайт рассказывает о нас и наших работах. Всё живое происходит в Telegram: там мы предлагаем идеи, берём задачи и делаем работы вместе.</p>
+        <ul class="tg-points">
+          <li>Предложить идею или проект</li>
+          <li>Взять задачу и работать в команде</li>
+          <li>Следить за новостями группы</li>
+        </ul>
+      </div>
+      <a data-tg class="btn btn-primary">Открыть Telegram</a>
+    </div>
+  </div>
+</section>
+
+<section id="news" style="background:var(--bg2)">
+  <div class="container">
+    <h2 class="title reveal">Новости и <span class="grad">галерея</span></h2>
+    <p class="sub reveal">Чем мы живём и где бываем.</p>
+
+    <article class="news-feature card reveal">
+      <img src="img/news-kabar.jpg" alt="Кыргызские студенты стали лучшими медиаспециалистами на Космических играх">
+      <div>
+        <span class="pill t-demo">Новость</span>
+        <h3>Кыргызские студенты стали лучшими медиаспециалистами на Космических играх</h3>
+        <p>Международные космические игры прошли в Москве на площадке МГТУ им. Н.Э. Баумана. О нашем успехе написало Кыргызское национальное информационное агентство «Кабар».</p>
+        <a href="https://kabar.kg" target="_blank" rel="noopener" class="btn btn-ghost" style="margin-top:20px">Источник: kabar.kg →</a>
+      </div>
+    </article>
+
+    <div class="gallery" id="photos">
+      <figure class="reveal"><img src="img/games-stage.jpg" alt="Международные космические игры, сцена" loading="lazy"><figcaption>Международные космические игры</figcaption></figure>
+      <figure class="reveal"><img src="img/games-field.jpg" alt="Команда на площадке игр" loading="lazy"><figcaption>На площадке игр</figcaption></figure>
+      <figure class="reveal"><img src="img/moscow.jpg" alt="Красная площадь, Москва" loading="lazy"><figcaption>Красная площадь, Москва</figcaption></figure>
+    </div>
+
+    <div class="video-block reveal">
+      <video controls playsinline preload="metadata" poster="media/projects-poster.jpg" aria-label="Видео: наши проекты на защите">
+        <source src="media/projects.mp4" type="video/mp4">
+        Ваш браузер не воспроизводит видео. <a href="media/projects.mp4">Скачать ролик</a>
+      </video>
+      <div>
+        <span class="pill t-demo">Видео</span>
+        <h3>Наши проекты на защите</h3>
+        <p>Короткий ролик с презентаций: ребята показывают свои работы вживую. Робот, автоматический полив, сборка на Arduino и модульные кубы для базы на Марсе.</p>
+        <a href="#bank" class="btn btn-ghost" style="margin-top:20px">Смотреть все проекты →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="support">
+  <div class="container">
+    <h2 class="title reveal">Поддержите <span class="grad">команду</span></h2>
+    <p class="sub reveal">Бюджет превращается в работающие проекты и новые победы. Вот на что он пойдёт.</p>
+    <div class="grid grid-2">
+      <div class="card need reveal"><h3>Оборудование и комплектующие</h3><p>Датчики, контроллеры, двигатели, 3D-принтер и материалы для сборки роботов и стендов.</p><span class="sum">Сумма: уточнить</span></div>
+      <div class="card need reveal"><h3>Конкурсы и хакатоны</h3><p>Поездки, взносы и подготовка команды к соревнованиям, как на Международных космических играх.</p><span class="sum">Сумма: уточнить</span></div>
+      <div class="card need reveal"><h3>Вычисления и сервисы</h3><p>Серверы и облачные мощности для обучения нейросетей, хостинг сайтов и демо.</p><span class="sum">Сумма: уточнить</span></div>
+      <div class="card need reveal"><h3>Демонстрации и стенды</h3><p>Корпуса, печать, оформление стендов и материалы, чтобы показывать результат на выставках.</p><span class="sum">Сумма: уточнить</span></div>
+    </div>
+    <div class="cta card reveal">
+      <div>
+        <h3>Хотите обсудить сотрудничество?</h3>
+        <p>Куратор группы: <b>ФИО куратора</b>. Почта: <b>your@email.kg</b>. Телефон: <b>+996 ___ ___ ___</b>.</p>
+      </div>
+      <a href="mailto:your@email.kg" class="btn btn-primary">Связаться с нами</a>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<div id="group-view" hidden></div>
+
+<footer>
+  <div class="container foot">
+    <div>
+      <div class="logo">МИР<span>×</span>АИР</div>
+      <p style="color:var(--muted);margin-top:8px">Мехатроника · Робототехника · Автоматизация · ИИ</p>
+    </div>
+    <div>
+      <a href="#achievements">Достижения</a>
+      <a href="#groups">Группы</a>
+      <a href="#bank">Банк идей</a>
+      <a href="#support">Поддержать команду</a>
+      <a data-tg>Telegram</a>
+    </div>
+  </div>
+  <p class="copy">© 2026 МИР×АИР</p>
+</footer>
+
+<noscript><p style="padding:24px;text-align:center">Для работы сайта нужен JavaScript.</p></noscript>
+<script src="data.js"></script>
+<script src="bank.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
