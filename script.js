@@ -2,6 +2,7 @@ const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const safeUrl = (u) => /^https?:\/\//i.test(u || '') ? u : '';
+const safeDoc = (u) => /^(https?:\/\/|media\/)/i.test(u || '') ? u : '';
 const plural = (n, f) => {
   const a = Math.abs(n) % 100, b = a % 10;
   return a > 10 && a < 20 ? f[2] : b > 1 && b < 5 ? f[1] : b === 1 ? f[0] : f[2];
@@ -74,8 +75,9 @@ function matches(it) {
 }
 
 function cardHTML(it, isBest = false, showGroup = true) {
-  const demo = safeUrl(it.demo), repo = safeUrl(it.repo);
-  const links = (demo || repo) ? `<div class="links">
+  const demo = safeUrl(it.demo), repo = safeUrl(it.repo), slides = safeDoc(it.slides);
+  const links = (demo || repo || slides) ? `<div class="links">
+      ${slides ? `<a href="${esc(slides)}" target="_blank" rel="noopener noreferrer">Презентация ↗</a>` : ''}
       ${demo ? `<a href="${esc(demo)}" target="_blank" rel="noopener noreferrer">Демо ↗</a>` : ''}
       ${repo ? `<a href="${esc(repo)}" target="_blank" rel="noopener noreferrer">Код ↗</a>` : ''}
     </div>` : '';
@@ -84,7 +86,7 @@ function cardHTML(it, isBest = false, showGroup = true) {
   const cover = (it.photos || [])[0];
   const page = it.id && it.story ? `#p-${esc(it.id)}` : '';
   return `<article class="card bank-card ${isBest ? 'best-card' : ''} ${cover ? 'has-cover' : ''}">
-    ${cover ? `<${page ? `a href="${page}"` : 'div'} class="cover"><img src="${esc(cover)}" alt="${esc(it.title)}" loading="lazy"></${page ? 'a' : 'div'}>` : ''}
+    ${cover ? `<${page ? `a href="${page}"` : 'div'} class="cover"><img src="${esc(cover.replace(/^img\//, 'img/t/'))}" onerror="this.onerror=null;this.src='${esc(cover)}'" alt="${esc(it.title)}" loading="lazy" decoding="async"></${page ? 'a' : 'div'}>` : ''}
     <div class="bank-top">
       <span class="pill t-${esc(it.type)}">${esc(TYPE[it.type] || it.type)}</span>
       ${showGroup && gn ? `<a class="pill t-group" href="#${esc(it.group)}">${esc(gn)}</a>` : ''}
@@ -312,7 +314,7 @@ function renderProject(it) {
   const photos = it.photos || [];
   const pairs = (list, cls) => `<div class="grid ${cls}">${list.map(([h, p], i) =>
     `<div class="card"><span class="p-num">${String(i + 1).padStart(2, '0')}</span><h3>${esc(h)}</h3><p>${esc(p)}</p></div>`).join('')}</div>`;
-  const demo = safeUrl(it.demo), repo = safeUrl(it.repo);
+  const demo = safeUrl(it.demo), repo = safeUrl(it.repo), slides = safeDoc(it.slides);
   const sameGroup = items.filter(x => x !== it && x.group === it.group).slice(0, 3);
   view.innerHTML = `
     <div class="page-head">
@@ -326,8 +328,9 @@ function renderProject(it) {
         <h1 class="p-title">${esc(it.title)}</h1>
         <p class="sub">${esc(it.desc)}</p>
         <div class="tags">${(it.tags || []).map(t => `<span class="tagchip">${esc(t)}</span>`).join('')}</div>
-        ${(demo || repo) ? `<div class="btns" style="margin-top:22px">
-          ${demo ? `<a class="btn btn-primary" href="${esc(demo)}" target="_blank" rel="noopener noreferrer">Смотреть демо ↗</a>` : ''}
+        ${(demo || repo || slides) ? `<div class="btns" style="margin-top:22px">
+          ${slides ? `<a class="btn btn-primary" href="${esc(slides)}" target="_blank" rel="noopener noreferrer">Презентация проекта ↗</a>` : ''}
+          ${demo ?`<a class="btn btn-primary" href="${esc(demo)}" target="_blank" rel="noopener noreferrer">Смотреть демо ↗</a>` : ''}
           ${repo ? `<a class="btn btn-ghost" href="${esc(repo)}" target="_blank" rel="noopener noreferrer">Код на GitHub ↗</a>` : ''}
         </div>` : ''}
       </div>

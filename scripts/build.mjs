@@ -14,7 +14,7 @@ for (const f of SITE_FILES.filter(f => f.endsWith('.js'))) {
 }
 
 // 2. все ссылки на img/ и media/ ведут на существующие файлы
-const assetRe = /(?:img|media)\/[A-Za-z0-9_.\-]+\.(?:jpg|jpeg|png|webp|svg|mp4)/g;
+const assetRe = /(?:img|media)\/[A-Za-z0-9_.\-\/]+\.(?:jpg|jpeg|png|webp|svg|mp4|pdf)/g;
 const seen = new Set();
 for (const f of SITE_FILES) {
   const text = readFileSync(f, 'utf8').split('\n')
