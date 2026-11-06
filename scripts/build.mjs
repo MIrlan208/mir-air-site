@@ -1,5 +1,5 @@
 // Сборка: проверяет файлы и копирует сайт в dist/. Без зависимостей (Node 18+).
-import { readFileSync, existsSync, mkdirSync, cpSync, rmSync, statSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, cpSync, rmSync, statSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 
 const SITE_FILES = ['index.html', 'style.css', 'script.js', 'data.js', 'bank.js'];
@@ -40,5 +40,19 @@ rmSync('dist', { recursive: true, force: true });
 mkdirSync('dist');
 for (const f of SITE_FILES) cpSync(f, `dist/${f}`);
 for (const d of SITE_DIRS) cpSync(d, `dist/${d}`, { recursive: true });
+// 5. версия сборки: метка в подвале и сброс кеша браузера (?v=...)
+let sha = process.env.GITHUB_SHA || '', when = new Date();
+try {
+  if (!sha) sha = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+  when = new Date(execFileSync('git', ['log', '-1', '--format=%cI'], { encoding: 'utf8' }).trim());
+} catch { /* без git: берём текущее время */ }
+const short = (sha || 'dev').slice(0, 7);
+const stamp = when.toLocaleString('ru-RU', { timeZone: 'Asia/Bishkek', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+let html = readFileSync('dist/index.html', 'utf8')
+  .replace('<!--BUILD-->', ` · версия ${short} от ${stamp}`)
+  .replace(/(href|src)="(style\.css|script\.js|data\.js|bank\.js)"/g, `$1="$2?v=${short}"`);
+writeFileSync('dist/index.html', html);
+console.log(`✓ версия сборки: ${short} от ${stamp}`);
+
 const mb = (statSync('dist/media/projects.mp4').size / 1048576).toFixed(1);
 console.log(`\n✓ Готово: dist/ (видео ${mb} МБ). Загрузи содержимое dist/ на хостинг.`);
