@@ -193,11 +193,11 @@ const memberHTML = (x) => {
     ${x.lead ? '<span class="lead-badge">Тимлид</span>' : ''}
   </li>`;
 };
-const rosterHTML = (squads) => squads.map(sq => `<div class="squad">
-    <div class="squad-head">
+const rosterHTML = (squads, flat) => squads.map(sq => `<div class="squad${flat ? ' flat' : ''}">
+    ${flat ? '' : `<div class="squad-head">
       <h3>${esc(sq.name)}</h3>
       ${sq.director ? `<span class="count">Руководитель отряда: <b>${esc(sq.director)}</b></span>` : ''}
-    </div>
+    </div>`}
     <div class="grid grid-3">
       ${sq.teams.map(t => `<div class="card team-card">
         <div class="team-top"><h4>${esc(t.name)}</h4><span class="count">${t.members.length} ${plural(t.members.length, ['человек', 'человека', 'человек'])}</span></div>
@@ -300,9 +300,9 @@ function renderGroup(g) {
       <div class="container">
         <h2 class="title">Состав <span class="grad">группы</span></h2>
         <p class="sub">${s.people
-          ? `${s.size || s.people} ${plural(s.size || s.people, ['человек', 'человека', 'человек'])}, ${g.squads.length} ${plural(g.squads.length, ['отряд', 'отряда', 'отрядов'])}, ${s.teams} ${plural(s.teams, ['команда', 'команды', 'команд'])}. Функции: инженер, тестировщик, документация и учёт, PR и работа с людьми.`
+          ? (g.flat ? `${s.size || s.people} ${plural(s.size || s.people, ['человек', 'человека', 'человек'])} в группе ${esc(g.full || g.name)}.` : `${s.size || s.people} ${plural(s.size || s.people, ['человек', 'человека', 'человек'])}, ${g.squads.length} ${plural(g.squads.length, ['отряд', 'отряда', 'отрядов'])}, ${s.teams} ${plural(s.teams, ['команда', 'команды', 'команд'])}. Функции: инженер, тестировщик, документация и учёт, PR и работа с людьми.`)
           : `Состав ${esc(g.name)} пока не добавлен.`}</p>
-        ${s.people ? rosterHTML(g.squads) : empty('Участники группы появятся здесь.')}
+        ${s.people ? rosterHTML(g.squads, g.flat) : empty('Участники группы появятся здесь.')}
       </div>
     </section>
 
