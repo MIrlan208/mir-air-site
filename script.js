@@ -14,6 +14,10 @@ const items = realOnly(typeof ITEMS !== 'undefined' ? ITEMS : []);
 const groups = typeof GROUPS !== 'undefined' ? GROUPS : [];
 const team = typeof TEAM !== 'undefined' ? TEAM : [];
 const achievements = realOnly(typeof ACHIEVEMENTS !== 'undefined' ? ACHIEVEMENTS : []);
+/* У записи может быть group: "mir-1" или groups: ["mir-1", "mir-2"] (смешанная команда) */
+const normGroups = (x) => { x.groups = Array.isArray(x.groups) && x.groups.length ? x.groups : (x.group ? [x.group] : []); x.group = x.groups[0] || ''; };
+items.forEach(normGroups); achievements.forEach(normGroups);
+const gpills = (ids, cls = 'pill t-group') => ids.map(id => gname(id) ? `<a class="${cls}" href="#${esc(id)}">${esc(gname(id))}</a>` : '').join('');
 const site = typeof SITE !== 'undefined' ? SITE : { telegram: '#' };
 const tgA = (t) => `<a href="${esc(site.telegram)}" target="_blank" rel="noopener noreferrer">${t}</a>`;
 const gname = (id) => (groups.find(g => g.id === id) || {}).name || '';
@@ -72,7 +76,7 @@ function matches(it) {
   const hay = [it.title, it.desc, it.author, (it.tags || []).join(' ')].join(' ').toLowerCase();
   return (!state.q || hay.includes(state.q))
     && (state.type === 'all' || it.type === state.type)
-    && (state.group === 'all' || it.group === state.group)
+    && (state.group === 'all' || it.groups.includes(state.group))
     && (state.status === 'all' || it.status === state.status);
 }
 
@@ -84,14 +88,13 @@ function cardHTML(it, isBest = false, showGroup = true) {
       ${repo ? `<a href="${esc(repo)}" target="_blank" rel="noopener noreferrer">Код ↗</a>` : ''}
     </div>` : '';
   const tags = (it.tags || []).map(t => `<span class="tagchip">${esc(t)}</span>`).join('');
-  const gn = gname(it.group);
   const cover = (it.photos || [])[0];
   const page = it.id && it.story ? `#p-${esc(it.id)}` : '';
   return `<article class="card bank-card ${isBest ? 'best-card' : ''} ${cover ? 'has-cover' : ''}">
     ${cover ? `<${page ? `a href="${page}"` : 'div'} class="cover"><img src="${esc(cover.replace(/^img\//, 'img/t/'))}" onerror="this.onerror=null;this.src='${esc(cover)}'" alt="${esc(it.title)}" loading="lazy" decoding="async"></${page ? 'a' : 'div'}>` : ''}
     <div class="bank-top">
       <span class="pill t-${esc(it.type)}">${esc(TYPE[it.type] || it.type)}</span>
-      ${showGroup && gn ? `<a class="pill t-group" href="#${esc(it.group)}">${esc(gn)}</a>` : ''}
+      ${showGroup ? gpills(it.groups) : ''}${it.groups.length > 1 ? '<span class="pill t-mix">Смешанная команда</span>' : ''}
       ${it.example ? '<span class="pill t-ex">Пример</span>' : ''}
     </div>
     <h3>${page ? `<a href="${page}">${esc(it.title)}</a>` : esc(it.title)}</h3>
@@ -174,7 +177,7 @@ if (!hasTg) { const tgSec = $('#telegram'); if (tgSec) tgSec.hidden = true; }
 
 /* ---------- достижения на главной ---------- */
 const achItemHTML = (a, withGroup = true) => `<div class="tl-item">
-    <time>${esc(a.date)}${withGroup && a.group ? ` · ${esc(gname(a.group))}` : ''}${a.example ? ' · <span class="ex-note">пример</span>' : ''}</time>
+    <time>${esc(a.date)}${withGroup && a.groups.length ? ` · ${esc(a.groups.map(gname).join(', '))}` : ''}${a.example ? ' · <span class="ex-note">пример</span>' : ''}</time>
     <h3>${esc(a.title)}</h3>
     <p>${esc(a.text)}</p>
   </div>`;
@@ -208,7 +211,7 @@ const rosterHTML = (squads, flat) => squads.map(sq => `<div class="squad${flat ?
 
 /* ---------- сводка по группе ---------- */
 function groupStats(g) {
-  const list = items.filter(i => i.group === g.id);
+  const list = items.filter(i => i.groups.includes(g.id));
   return {
     list,
     people: g.squads.reduce((n, s) => n + s.teams.reduce((k, t) => k + t.members.length, 0), 0),
@@ -217,7 +220,7 @@ function groupStats(g) {
     projects: list.filter(isProject).length,
     ideas: list.filter(i => i.type === 'idea').length,
     demos: list.filter(isDemo).length,
-    ach: achievements.filter(a => a.group === g.id)
+    ach: achievements.filter(a => a.groups.includes(g.id))
   };
 }
 
@@ -336,19 +339,18 @@ function renderGroup(g) {
 /* ---------- страница проекта ---------- */
 function renderProject(it) {
   const st = it.story;
-  const gn = gname(it.group);
   const photos = it.photos || [];
   const pairs = (list, cls) => `<div class="grid ${cls}">${list.map(([h, p], i) =>
     `<div class="card"><span class="p-num">${String(i + 1).padStart(2, '0')}</span><h3>${esc(h)}</h3><p>${esc(p)}</p></div>`).join('')}</div>`;
   const demo = safeUrl(it.demo), repo = safeUrl(it.repo), slides = safeDoc(it.slides);
-  const sameGroup = items.filter(x => x !== it && x.group === it.group).slice(0, 3);
+  const sameGroup = items.filter(x => x !== it && x.groups.some(g => it.groups.includes(g))).slice(0, 3);
   view.innerHTML = `
     <div class="page-head">
       <div class="container">
         <a class="back-link" href="#bank">← Банк идей</a>
         <div class="bank-top">
           <span class="pill t-${esc(it.type)}">${esc(TYPE[it.type] || it.type)}</span>
-          ${gn ? `<a class="pill t-group" href="#${esc(it.group)}">${esc(gn)}</a>` : ''}
+          ${gpills(it.groups)}${it.groups.length > 1 ? '<span class="pill t-mix">Смешанная команда</span>' : ''}
           <span class="st st-${esc(it.status)}">${esc(STATUS[it.status] || '')}</span>
         </div>
         <h1 class="p-title">${esc(it.title)}</h1>
@@ -404,11 +406,11 @@ function renderProject(it) {
     </div></section>` : ''}
 
     <section><div class="container other">
-      ${sameGroup.length ? `<h2 class="title">Ещё от <span class="grad">${esc(gn)}</span></h2>
+      ${sameGroup.length ? `<h2 class="title">Ещё от <span class="grad">${esc(it.groups.map(gname).filter(Boolean).join(' и '))}</span></h2>
         <div class="grid grid-3">${sameGroup.map(x => cardHTML(x, false, false)).join('')}</div>` : ''}
       <div class="btns" style="margin-top:28px">
         <a class="btn btn-primary" href="#bank">Весь банк идей</a>
-        ${gn ? `<a class="btn btn-ghost" href="#${esc(it.group)}">Страница ${esc(gn)}</a>` : ''}
+        ${it.groups.filter(gname).map(id => `<a class="btn btn-ghost" href="#${esc(id)}">Страница ${esc(gname(id))}</a>`).join('')}
       </div>
     </div></section>`;
 }
