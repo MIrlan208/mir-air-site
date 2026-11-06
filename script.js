@@ -8,10 +8,12 @@ const plural = (n, f) => {
   return a > 10 && a < 20 ? f[2] : b > 1 && b < 5 ? f[1] : b === 1 ? f[0] : f[2];
 };
 
-const items = typeof ITEMS !== 'undefined' ? ITEMS : [];
+const SHOW_EXAMPLES = typeof SITE !== 'undefined' && SITE.showExamples === true;
+const realOnly = (list) => SHOW_EXAMPLES ? list : list.filter(x => !x.example);
+const items = realOnly(typeof ITEMS !== 'undefined' ? ITEMS : []);
 const groups = typeof GROUPS !== 'undefined' ? GROUPS : [];
 const team = typeof TEAM !== 'undefined' ? TEAM : [];
-const achievements = typeof ACHIEVEMENTS !== 'undefined' ? ACHIEVEMENTS : [];
+const achievements = realOnly(typeof ACHIEVEMENTS !== 'undefined' ? ACHIEVEMENTS : []);
 const site = typeof SITE !== 'undefined' ? SITE : { telegram: '#' };
 const tgA = (t) => `<a href="${esc(site.telegram)}" target="_blank" rel="noopener noreferrer">${t}</a>`;
 const gname = (id) => (groups.find(g => g.id === id) || {}).name || '';
@@ -144,7 +146,31 @@ renderBank();
 renderBest();
 
 /* ---------- ссылки на Telegram ---------- */
-$$('[data-tg]').forEach(a => { a.href = site.telegram; a.target = '_blank'; a.rel = 'noopener noreferrer'; });
+const hasTg = /^https?:\/\//i.test(site.telegram || '') && !/your_group/.test(site.telegram);
+$$('[data-tg]').forEach(a => {
+  if (!hasTg) { (a.closest('li') || a).hidden = true; return; }
+  a.href = site.telegram; a.target = '_blank'; a.rel = 'noopener noreferrer';
+});
+if (!hasTg) { const tgSec = $('#telegram'); if (tgSec) tgSec.hidden = true; }
+
+/* ---------- контакты и суммы в блоке «Поддержать команду» ---------- */
+(() => {
+  const c = site.curator || {};
+  const parts = [];
+  if (c.name) parts.push(`Куратор группы: <b>${esc(c.name)}</b>${/\.$/.test(c.name) ? '' : '.'}`);
+  if (c.email) parts.push(`Почта: <b>${esc(c.email)}</b>.`);
+  if (c.phone) parts.push(`Телефон: <b>${esc(c.phone)}</b>.`);
+  const box = $('#cta'), txt = $('#cta-contacts'), mail = $('#cta-mail');
+  if (box) {
+    if (!parts.length && !hasTg) box.hidden = true;
+    if (txt) txt.innerHTML = parts.join(' ') || 'Напишите нам в Telegram.';
+    if (mail) { if (c.email) mail.href = 'mailto:' + c.email; else if (hasTg) { mail.href = site.telegram; mail.target = '_blank'; mail.rel = 'noopener noreferrer'; } else mail.hidden = true; }
+  }
+  $$('[data-sum]').forEach(el => {
+    const v = (site.sums || [])[+el.dataset.sum];
+    if (v) el.textContent = 'Нужно: ' + v; else el.remove();
+  });
+})();
 
 /* ---------- достижения на главной ---------- */
 const achItemHTML = (a, withGroup = true) => `<div class="tl-item">
